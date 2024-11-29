@@ -1,0 +1,47 @@
+{% extends "bostocracy/layout.html" %}
+{% load static %}
+
+{% block title %}
+BOS
+{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+      <events-map></events-map>
+    {% else %}
+      <events-map></events-map>
+    {% endif %}
+
+    <template id="events-map-view">
+      <div id='map'></div>
+    </template>
+{% endblock %}
+
+{% block script %}
+    <script type="importmap">
+      {
+        "imports": {
+          "api": "{% static 'bostocracy/api.js' %}",
+          "tags": "{% static 'bostocracy/tags.js' %}",
+          "index": "{% static 'bostocracy/index.js' %}",
+          "angles": "{% static 'bostocracy/angles.js' %}",
+          "actions": "{% static 'bostocracy/actions.js' %}",
+          "events-map": "{% static 'bostocracy/events-map.js' %}",
+          "style-events-map": "{% static 'bostocracy/events-map.css' %}",
+          "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+          "style-leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+          "esri-leaflet": "https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
+        },
+        "integrity": {
+          "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js": "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=",
+          "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css": "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        }
+      }
+    </script>
+    <script type="module">
+      import { index } from 'index';
+      index({
+        username: "{{ user.username }}"
+      });
+    </script>
+{% endblock %}

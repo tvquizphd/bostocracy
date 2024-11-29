@@ -1,0 +1,23 @@
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+body {
+  --gap: 2em;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  > nav {
+    grid-row: 1;
+    grid-column: 1;
+    z-index: 10000;
+  }
+  > div.body {
+    grid-column: 1;
+    grid-row: 1 / -1; 
+  }
+  > div.body:has(> form) {
+    grid-row: 2;
+  }
+}
