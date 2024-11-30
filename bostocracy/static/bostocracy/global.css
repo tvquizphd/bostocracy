@@ -1,0 +1,5 @@
+:host {
+  --gap-average: 1em;
+  --panel-tall: 12em;
+  --button-wide: 10em;
+}

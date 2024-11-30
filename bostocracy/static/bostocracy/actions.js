@@ -1,4 +1,4 @@
-import { tabs } from "tags";
+import { tabs } from "constants";
 
 const toggle_tab = async (tab, options={}) => {
   const other_tabs = tabs.filter(other => other !== tab).map(

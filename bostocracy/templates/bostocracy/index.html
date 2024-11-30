@@ -7,14 +7,19 @@ BOS
 
 {% block body %}
     {% if user.is_authenticated %}
-      <layer-map></layer-map>
+      <page-root></page-root>
     {% else %}
-      <layer-map></layer-map>
+      <page-root></page-root>
     {% endif %}
 
     <template id="layer-map-view">
       <div id='map'></div>
     </template>
+    <template id="page-root-view">
+      <layer-map></layer-map>
+      <stop-list ids="" ></stop-list>
+    </template>
+
 {% endblock %}
 
 {% block script %}
@@ -23,13 +28,18 @@ BOS
         "imports": {
           "api": "{% static 'bostocracy/api.js' %}",
           "color": "{% static 'bostocracy/color.js' %}",
-          "tags": "{% static 'bostocracy/tags.js' %}",
           "index": "{% static 'bostocracy/index.js' %}",
           "angles": "{% static 'bostocracy/angles.js' %}",
           "actions": "{% static 'bostocracy/actions.js' %}",
+          "constants": "{% static 'bostocracy/constants.js' %}",
+          "page-root": "{% static 'bostocracy/page-root.js' %}",
+          "stop-list": "{% static 'bostocracy/stop-list.js' %}",
           "layer-map": "{% static 'bostocracy/layer-map.js' %}",
-          "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",
+          "style-global": "{% static 'bostocracy/global.css' %}",
+          "style-page-root": "{% static 'bostocracy/page-root.css' %}",
+          "style-stop-list": "{% static 'bostocracy/stop-list.css' %}",
           "style-layer-map": "{% static 'bostocracy/layer-map.css' %}",
+          "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",
           "config-layer-map": "{% static 'bostocracy/config-layer-map.js' %}",
           "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
           "style-leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",

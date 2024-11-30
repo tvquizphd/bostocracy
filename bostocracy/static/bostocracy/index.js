@@ -1,14 +1,26 @@
 import { LayerMap } from "layer-map";
+import { StopList } from "stop-list";
+import { PageRoot } from "page-root";
 import { toggle_tab } from "actions";
-import { tabs, default_tab } from "tags";
-
+import { 
+  events, tabs, default_tab
+} from "constants";
 
 const index = (user) => {
-  // Tabs
-  customElements.define(default_tab, LayerMap);
-  // Within the tabs
-  //customElements.define("one-post", inherit(OnePost));
-
+  // Default Tab
+  customElements.define(
+    default_tab, eventReceiver(
+      PageRoot, PageRoot.eventHandlerKeys
+    )
+  );
+  // Map Layer 
+  customElements.define(
+    "layer-map", eventSender(LayerMap)
+  );
+  // List of MBTA stops
+  customElements.define(
+    "stop-list", StopList
+  )
   // Tab selection
   tabs.forEach(tab => {
     [
@@ -19,10 +31,40 @@ const index = (user) => {
       )
     );
   });
-
   // By default
   toggle_tab(default_tab, user);
 };
+
+
+const eventSender = (element) => {
+  return class extends element {
+    sendCustomEvent(key, detail) {
+      if (!events.has(key)) {
+        throw new Error(`Invalid Custom Event: "${key}"`);
+      }
+      const [bubbles, composed] = [true, true];
+      this.shadowRoot.dispatchEvent(new CustomEvent(
+        key, { detail, bubbles, composed }
+      ));
+    }
+  }
+}
+
+const eventReceiver = (element, keys=[]) => {
+  if (!keys.every(key => events.has(key))) {
+    throw new Error(`Invalid Custom Events`);
+  }
+  return class extends element {
+    async connectedCallback() {
+      await super.connectedCallback();
+      keys.forEach(
+        key => this.addEventListener(
+          key, this.toEventHandler(key)
+        )
+      )
+    }
+  }
+}
 
 
 const inherit = (element, attrs=["self"]) => {

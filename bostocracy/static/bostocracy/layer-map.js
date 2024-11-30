@@ -6,6 +6,7 @@ import {
   to_boston_bounds
 } from "config-layer-map";
 import { LayerChanges } from "layer-changes";
+import StyleGlobal from "style-global" with { type: "css" };
 import StyleLeaflet from "style-leaflet" with { type: "css" };
 import StyleLayerMap from "style-layer-map" with { type: "css" };
 
@@ -15,7 +16,7 @@ class LayerMap extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.adoptedStyleSheets = [
-      StyleLayerMap, StyleLeaflet
+      StyleGlobal, StyleLayerMap, StyleLeaflet
     ];
   }
 
@@ -230,7 +231,7 @@ class LayerMap extends HTMLElement {
       }]],
       // MBTA stops
       ['dot/feature', "Multimodal/GTFS_Systemwide", [0], {
-        fields: ["OBJECTID", "stop_name", "stop_id"],
+        fields: ["OBJECTID", "stop_id"],
         where: wherein(
           "municipality", Object.keys(towns)
         ),
@@ -294,15 +295,26 @@ class LayerMap extends HTMLElement {
     // add layer events
     const changes = new LayerChanges();
     map.on('movestart', changes.reset);
-    changes.addEventListener(
-      LayerChanges.redraw, () => {
-//        console.log("redraw"); // TODO
-      }
-    );
+    const stop_key = "stop_id";
+    const redraw_stops = layer => () => {
+      const stop_ids = ((stop_ids) => {
+        layer.eachActiveFeature(({feature}) => (
+          stop_ids.push(feature.properties[stop_key])
+        ))
+        return stop_ids
+      })([]);
+      this.sendCustomEvent("stops/redraw", { stop_ids });
+    };
     layers.entries().forEach(([key, layer]) => {
       changes.add(key);
+      const { fields } = layer.options;
+      if (fields && fields.includes(stop_key)){
+        changes.addEventListener(
+          LayerChanges.redraw, redraw_stops(layer) 
+        );
+      }
       layer.on('load', changes.loaded(key));
-    })
+  })
   }
 }
 
