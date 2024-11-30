@@ -101,8 +101,8 @@ const wherein = (key, items, inverse=false) => {
   return find(items.map(t=>`'${t}'`).join(','))
 }; 
 
-const layer_mapper = map => (
-  [zIndex, layers], [method, ...args]
+const layer_mapper = (map) => (
+  [zIndex, layer_map], [method, ...args]
 ) => {
   const [url_key, fn_key] = method.split('/');
   const server = get_server(url_key);
@@ -115,13 +115,15 @@ const layer_mapper = map => (
     pane, zIndex, server, ...args
   );
   if (layer === null) {
-    return layers;
+    return layer_map;
   }
   layer.addTo(map)
   layer.remove()
   layer.addTo(map)
   return [ 
-    zIndex + 1, [ ...layers, layer ]
+    zIndex + 1, new Map([
+      ...layer_map.entries(), [zIndex, layer]
+    ])
   ];
 }
 
@@ -130,36 +132,39 @@ const to_map_layer = (
 ) => {
   const dynamic = data.some(isNaN);
   const root = `${server}/rest/services`
-  return L.esri.dynamicMapLayer({
+  const layer = L.esri.dynamicMapLayer({
     url: `${root}/${endpoint}/MapServer`,
-    format: "png32",
-    attribution: "",
-    f: "image",
-    pane,
-    zIndex,
+    format: "png32", attribution: "",
+    f: "image", pane, zIndex,
     ...{
       [ !dynamic ? 'layers' : 'dynamicLayers' ]: (
         !dynamic ? data : JSON.stringify(data)
       )
     },
   });
+  return layer;
 }
 
 const to_feature_layer = (
   pane, zIndex, server, endpoint, data=[0], opts={}
 ) => {
+  const {
+    renderer, fields, where, style, pointToLayer
+  } = opts;
+  const {
+    eachActiveFeature
+  } = opts;
   const root = `${server}/rest/services`
   const dynamic = data.some(isNaN);
   if (dynamic || data.length !== 1) {
     return null;
   }
-  return L.esri.featureLayer({
+  const layer = L.esri.featureLayer({
     url: `${root}/${endpoint}/FeatureServer/${data[0]}`,
-    attribution: "",
-    pane,
-    zIndex,
-    ...opts
+    attribution: "", pane, zIndex, renderer,
+    fields, where, style, pointToLayer
   });
+  return layer;
 }
 
 const to_boston_bounds = (wide) => {

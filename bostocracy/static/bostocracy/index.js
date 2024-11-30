@@ -1,11 +1,11 @@
-import { EventsMap } from "events-map";
+import { LayerMap } from "layer-map";
 import { toggle_tab } from "actions";
 import { tabs, default_tab } from "tags";
 
 
 const index = (user) => {
   // Tabs
-  customElements.define(default_tab, EventsMap);
+  customElements.define(default_tab, LayerMap);
   // Within the tabs
   //customElements.define("one-post", inherit(OnePost));
 

@@ -7,12 +7,12 @@ BOS
 
 {% block body %}
     {% if user.is_authenticated %}
-      <events-map></events-map>
+      <layer-map></layer-map>
     {% else %}
-      <events-map></events-map>
+      <layer-map></layer-map>
     {% endif %}
 
-    <template id="events-map-view">
+    <template id="layer-map-view">
       <div id='map'></div>
     </template>
 {% endblock %}
@@ -27,9 +27,10 @@ BOS
           "index": "{% static 'bostocracy/index.js' %}",
           "angles": "{% static 'bostocracy/angles.js' %}",
           "actions": "{% static 'bostocracy/actions.js' %}",
-          "events-map": "{% static 'bostocracy/events-map.js' %}",
-          "style-events-map": "{% static 'bostocracy/events-map.css' %}",
-          "config-events-map": "{% static 'bostocracy/config-events-map.js' %}",
+          "layer-map": "{% static 'bostocracy/layer-map.js' %}",
+          "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",
+          "style-layer-map": "{% static 'bostocracy/layer-map.css' %}",
+          "config-layer-map": "{% static 'bostocracy/config-layer-map.js' %}",
           "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
           "style-leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
           "esri-leaflet": "https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"

@@ -4,17 +4,18 @@ import { Color } from "color";
 import {
   to_map_config, layer_mapper, wherein,
   to_boston_bounds
-} from "config-events-map";
+} from "config-layer-map";
+import { LayerChanges } from "layer-changes";
 import StyleLeaflet from "style-leaflet" with { type: "css" };
-import StyleEventsMap from "style-events-map" with { type: "css" };
+import StyleLayerMap from "style-layer-map" with { type: "css" };
 
-class EventsMap extends HTMLElement {
+class LayerMap extends HTMLElement {
 
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.adoptedStyleSheets = [
-      StyleEventsMap, StyleLeaflet
+      StyleLayerMap, StyleLeaflet
     ];
   }
 
@@ -24,7 +25,7 @@ class EventsMap extends HTMLElement {
 
   async render() {
     this.shadowRoot.innerHTML = "";
-    const template = document.getElementById("events-map-view");
+    const template = document.getElementById("layer-map-view");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     // https://developers.arcgis.com/esri-leaflet/
     const map = L.map(this.shadowRoot.getElementById("map"), {
@@ -178,6 +179,9 @@ class EventsMap extends HTMLElement {
             fillOpacity: 1,
             fillColor: "#"+theme.water.hex
           };
+        },
+        eachActiveFeature: (...args) => {
+          console.log(args);
         }
       }],
       // Bridges
@@ -227,7 +231,6 @@ class EventsMap extends HTMLElement {
       // MBTA stops
       ['dot/feature', "Multimodal/GTFS_Systemwide", [0], {
         fields: ["OBJECTID", "stop_name", "stop_id"],
-        renderer: L.canvas(),
         where: wherein(
           "municipality", Object.keys(towns)
         ),
@@ -285,9 +288,22 @@ class EventsMap extends HTMLElement {
         }
       }]]
     ].reduce(
-      layer_mapper(map), [1, []]
+      layer_mapper(map),
+      [1, new Map()]
     ).pop();
+    // add layer events
+    const changes = new LayerChanges();
+    map.on('movestart', changes.reset);
+    changes.addEventListener(
+      LayerChanges.redraw, () => {
+//        console.log("redraw"); // TODO
+      }
+    );
+    layers.entries().forEach(([key, layer]) => {
+      changes.add(key);
+      layer.on('load', changes.loaded(key));
+    })
   }
 }
 
-export { EventsMap };
+export { LayerMap };
