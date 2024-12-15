@@ -24,6 +24,55 @@ BOS
       <div></div>
       <div></div>
       <button>X</button>
+      <event-form></event-form>
+    </template>
+    <template id="event-form-view">
+      <form>
+        <div class="wrap-line">
+          <div class="wrap-label">
+            <label for="datetime">
+              When? 
+            </label>
+          </div>
+          <div class="wrap-input">
+            <input
+              id="datetime" name="datetime" type="datetime-local"
+            />
+          </div>
+        </div>
+        <div>
+          <div class="wrap-line">
+            <div class="wrap-label">
+              <label for="title">
+                Event Name
+              </label>
+            </div>
+            <div class="wrap-input">
+              <input
+                id="title" name="title" type="text"
+              />
+            </div>
+          </div>
+          <div class="wrap-line">
+            <div class="wrap-label">
+              <label for="org">
+                Organization
+              </label>
+            </div>
+            <div class="wrap-input">
+              <input
+                id="org" name="org" type="text"
+              />
+            </div>
+          </div>
+          <div class="wrap-line">
+            <div class="wrap-input wrap-submit">
+              <input type="submit" value="Create">
+            </div>
+          </div>
+        </div>
+        {% csrf_token %}
+      </form>
     </template>
 
 {% endblock %}
@@ -39,11 +88,13 @@ BOS
           "constants": "{% static 'bostocracy/constants.js' %}",
           "page-root": "{% static 'bostocracy/page-root.js' %}",
           "event-modal": "{% static 'bostocracy/event-modal.js' %}",
+          "event-form": "{% static 'bostocracy/event-form.js' %}",
           "stop-list": "{% static 'bostocracy/stop-list.js' %}",
           "layer-map": "{% static 'bostocracy/layer-map.js' %}",
           "style-global": "{% static 'bostocracy/global.css' %}",
           "style-page-root": "{% static 'bostocracy/page-root.css' %}",
           "style-event-modal": "{% static 'bostocracy/event-modal.css' %}",
+          "style-event-form": "{% static 'bostocracy/event-form.css' %}",
           "style-stop-list": "{% static 'bostocracy/stop-list.css' %}",
           "style-layer-map": "{% static 'bostocracy/layer-map.css' %}",
           "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",

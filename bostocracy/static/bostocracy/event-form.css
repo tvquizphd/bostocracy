@@ -1,0 +1,93 @@
+:host {
+  display: contents;
+  > form {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    display: grid;
+    pointer-events: none;
+    padding: var(--gap-small);
+    grid-template-columns: 1fr 3em;
+    grid-template-rows: 1fr 2fr 1fr var(--panel-high);
+    > div:nth-child(1) {
+      grid-row: 1;
+      grid-column: 1;
+    }
+    > div:nth-child(2) {
+      display: grid;
+      grid-row: 3 / -1;
+      grid-column: 1 / -1;
+      gap: var(--gap-average);
+      grid-template-rows: 1fr 1fr 3fr;
+    }
+    div.wrap-line {
+      font-size: 1em;
+      display: grid;
+      justify-self: center;
+      gap: var(--gap-small);
+      grid-template-columns: var(--label-wide) 1fr;
+      grid-template-rows: auto auto 1fr;
+      > div.wrap-label {
+        align-content: center;
+        display: grid;
+        > label {
+          line-height: 2em; 
+          font-size: inherit;
+          text-align: center;
+          padding: var(--gap-tiny);
+          border: var(--main-dark-border);
+          border-radius: var(--button-border-radius);
+        }
+      }
+      > div.wrap-input {
+        justify-content: start;
+        align-content: center;
+        grid-template-columns: 1fr;
+        display: grid;
+        > input {
+          border: none;
+          pointer-events: all;
+          padding: var(--gap-tiny);
+          box-shadow: var(--box-shadow);
+          background-color: hwb(var(--light-focus));
+          border-radius: var(--button-border-radius);
+          font-size: 1.2em;
+        }
+        > input::-webkit-calendar-picker-indicator {
+          font-size: 3em;
+        } 
+        > input[type=text] {
+          line-height: 2em; 
+          width: 300px;
+        }
+        > input[type=submit] {
+          cursor: pointer;
+          font-size: 1.5em;
+          padding: var(--button-padding);
+        }
+      }
+      > div.wrap-input.wrap-submit {
+        grid-column: -1;
+      }
+    }
+  }
+}
+
+:host(.hide) {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  :host {
+    > form {
+      > div:nth-child(1) {
+        grid-column: 1 / -1;
+        div.wrap-label {
+          justify-content: start;
+        }
+      }
+      div.wrap-line { 
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

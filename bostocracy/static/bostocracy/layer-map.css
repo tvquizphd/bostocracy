@@ -11,4 +11,7 @@
   background-color: rgb(184, 184, 184);
   height: 100%;
   width: 100vw;
+  div.leaflet-pane.leaflet-max-pane-pane {
+    z-index: 10000;
+  }
 }

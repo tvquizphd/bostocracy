@@ -43,22 +43,31 @@ class LayerMap extends HTMLElement {
           fillOpacity: 0.5
         }
       )
-      this.circles = this.circles.filter(({ circle, kind }) => {
-        if (kind == "events/modal") {
-          circle.remove();
-          return false;
-        }
-        return true;
-      })
+      this.removeCircleType(
+        "events/modal"
+      )
+      circle.on("click", () => {
+        alert('ok');
+      });
       circle.addTo(this.map);
       this.circles.push({
         circle, kind: 'events/modal'
       });
       this.map.setView(
         point, Math.min(
-          this.map.getZoom()+2, 15
+          this.map.getZoom()+2, 14
         )
       );
+    });
+  }
+
+  removeCircleType(type) {
+    this.circles = this.circles.filter(({ circle, kind }) => {
+      if (kind == type) {
+        circle.remove();
+        return false;
+      }
+      return true;
     });
   }
 

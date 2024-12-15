@@ -2,6 +2,7 @@ import { LayerMap } from "layer-map";
 import { StopList } from "stop-list";
 import { PageRoot } from "page-root";
 import { EventModal } from "event-modal";
+import { EventForm } from "event-form";
 import { 
   events
 } from "constants";
@@ -13,9 +14,13 @@ const index = (user) => {
       PageRoot, PageRoot.eventHandlerKeys
     )
   );
+  // Event Form
+  customElements.define(
+    "event-form", eventSender(EventForm)
+  );
   // Event Modal
   customElements.define(
-    "event-modal", EventModal
+    "event-modal", eventSender(EventModal)
   );
   // Map Layer 
   customElements.define(

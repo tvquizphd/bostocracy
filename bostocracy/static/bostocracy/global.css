@@ -1,6 +1,7 @@
 :host {
   --gap-average: 1em;
   --panel-high: 12em;
+  --label-wide: 8em;
   --button-wide: 10em;
   --button-high: 5em;
   --dark-main: 200 0% 80%;
@@ -8,14 +9,16 @@
   --dark-error: 20 0% 80%;
   --light-error: 350 53% 0%;
   --dark-focus: 290 0% 80%;
-  --light-focus: 36 35% 0%;
+  --light-focus: 36 70% 10%;
   --dark-action: 240 0% 70%;
   --light-action: 240 70% 3.9%;
-  --button-border-radius: 5px;
+  --button-border-radius: 8px;
+  --box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 5px 5px rgba(0,0,0,0.4);
+  --main-dark-border: 1px solid hwb(var(--dark-main) / 0.7);
   --main-border: 1px solid hwb(var(--light-main) / 0.7);
   --focus-border: 1px solid hwb(var(--light-focus) / 0.7);
   --error-border: 1px solid hwb(var(--light-error) / 0.7);
-  --button-padding: var(--gap-tiny) var(--gap-average);
+  --button-padding: var(--gap-average);
   --button-weight: 500;
   --gap-average: 0.9em;
   --gap-small: 0.6em;

@@ -5,15 +5,16 @@
   grid-template-columns: repeat(
     auto-fill, minmax(var(--button-wide), 1fr)
   );
+  gap: var(--gap-average);
   display: grid;
   color: white;
   button {
     color: inherit;
     font-size: 1em;
     cursor: pointer;
-    margin: var(--gap-tiny);
     border: var(--main-border);
     height: var(--button-high);
+    box-shadow: var(--box-shadow);
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
     background-color: hwb(var(--dark-main));

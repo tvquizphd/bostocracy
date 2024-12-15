@@ -25,6 +25,9 @@ class EventModal extends HTMLElement {
     const button_el = copy.querySelector("button");
     button_el.addEventListener("click", () => {
       this.className = "hide";
+      this.sendCustomEvent(
+        "events/modal/close", {}
+      );
     });
     this.shadowRoot.appendChild(copy);
   }

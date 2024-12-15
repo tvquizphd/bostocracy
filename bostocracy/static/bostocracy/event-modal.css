@@ -1,8 +1,9 @@
 :host {
+  --close: 4em;
   display: grid;
   z-index: 1000000;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr var(--panel-high);
+  grid-template-columns: 1fr var(--close);
+  grid-template-rows: var(--close) 1fr var(--panel-high);
   > div:nth-child(1) {
     grid-row: 1 / 3;
     grid-column: 1 / -1;
@@ -23,13 +24,14 @@
     grid-row: 1;
     grid-column: 2;
     font-size: 1em;
-    width: 3em;
-    height: 3em;
     cursor: pointer;
-    margin: var(--gap-tiny);
     border: var(--main-border);
     color: hwb(var(--dark-error));
+    margin: var(--gap-small);
     padding: var(--button-padding);
+    box-shadow: var(--box-shadow);
+    width: calc(var(--close)- 2*var(--button-padding));
+    height: calc(var(--close)- 2*var(--button-padding));
     border-radius: var(--button-border-radius);
     background-color: hwb(var(--light-error));
     font-weight: var(--button-weight);
