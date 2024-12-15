@@ -91,10 +91,10 @@ const get_mbta_stops = async () => {
       return stops.reduce(
         (links, stop, i) => {
           const { id, attributes } = stop;
-          const { latitude, longitude } = attributes;
+          const { latitude, longitude, name } = attributes;
           const info = (
             links.get(id) || {
-              id, latitude, longitude,
+              id, latitude, longitude, name,
               colors: [color], routes: {}
             }
           )

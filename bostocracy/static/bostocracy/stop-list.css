@@ -6,4 +6,17 @@
     auto-fill, minmax(var(--button-wide), 1fr)
   );
   display: grid;
+  color: white;
+  button {
+    color: inherit;
+    font-size: 1em;
+    cursor: pointer;
+    margin: var(--gap-tiny);
+    border: var(--main-border);
+    height: var(--button-high);
+    padding: var(--button-padding);
+    border-radius: var(--button-border-radius);
+    background-color: hwb(var(--dark-main));
+    font-weight: var(--button-weight);
+  }
 }

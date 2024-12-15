@@ -1,5 +1,18 @@
 :host {
   height: 100%;
   display: grid;
-  grid-template-rows: 1fr var(--panel-tall);
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr var(--panel-high);
+  > *:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  > *:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  > *:nth-child(3) {
+    grid-column: 1;
+    grid-row: 1/-1;
+  }
 }

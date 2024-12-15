@@ -14,6 +14,8 @@ class LayerMap extends HTMLElement {
 
   constructor() {
     super();
+    this.circles = [];
+    this.max_pane = "max-pane";
     this.attachShadow({ mode: "open" });
     this.shadowRoot.adoptedStyleSheets = [
       StyleGlobal, StyleLayerMap, StyleLeaflet
@@ -24,24 +26,60 @@ class LayerMap extends HTMLElement {
     await this.render();
   }
 
+  async panTo(latitude, longitude) {
+    if (!this.map) {
+      return;
+    }
+    const point = new L.LatLng(latitude, longitude);
+    this.map.panTo(point);
+    this.map.once('moveend', () => {
+      const circle = L.circle(
+        point, {
+          weight: 5,
+          radius: 400,
+          color: "#FFBD59",
+          fillColor: "#2A0033",
+          pane: this.max_pane,
+          fillOpacity: 0.5
+        }
+      )
+      this.circles = this.circles.filter(({ circle, kind }) => {
+        if (kind == "events/modal") {
+          circle.remove();
+          return false;
+        }
+        return true;
+      })
+      circle.addTo(this.map);
+      this.circles.push({
+        circle, kind: 'events/modal'
+      });
+      this.map.setView(
+        point, Math.min(
+          this.map.getZoom()+2, 15
+        )
+      );
+    });
+  }
+
   async render() {
     this.shadowRoot.innerHTML = "";
     const template = document.getElementById("layer-map-view");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     // https://developers.arcgis.com/esri-leaflet/
-    const map = L.map(this.shadowRoot.getElementById("map"), {
+    this.map = L.map(this.shadowRoot.getElementById("map"), {
       zoomControl: false, attributionControl: false
     });
     ;
-    map.fitBounds(to_boston_bounds(false));
-    map.setMaxBounds(to_boston_bounds(true));
-    map.setMinZoom(12);
-    map.setZoom(12);
+    this.map.fitBounds(to_boston_bounds(false));
+    this.map.setMaxBounds(to_boston_bounds(true));
+    this.map.setMinZoom(12);
+    this.map.setZoom(12);
     const {
       towns, town_ids, measurements, water_names,
       bridge_types, owner_types
     } = await to_map_config(
-      stop => map.latLngToContainerPoint(
+      stop => this.map.latLngToContainerPoint(
         [stop.latitude, stop.longitude]
       )
     );
@@ -289,12 +327,13 @@ class LayerMap extends HTMLElement {
         }
       }]]
     ].reduce(
-      layer_mapper(map),
+      layer_mapper(this.map),
       [1, new Map()]
     ).pop();
+    this.map.createPane(this.max_pane);
     // add layer events
     const changes = new LayerChanges();
-    map.on('movestart', changes.reset);
+    this.map.on('movestart', changes.reset);
     const stop_key = "stop_id";
     const redraw_stops = layer => () => {
       const stop_ids = ((stop_ids) => {
@@ -309,8 +348,8 @@ class LayerMap extends HTMLElement {
       changes.add(key);
       const { fields } = layer.options;
       if (fields && fields.includes(stop_key)){
-        changes.addEventListener(
-          LayerChanges.redraw, redraw_stops(layer) 
+        changes.addRedrawLayer(
+          layer, redraw_stops(layer)
         );
       }
       layer.on('load', changes.loaded(key));

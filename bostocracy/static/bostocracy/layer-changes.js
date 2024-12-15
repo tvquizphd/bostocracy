@@ -36,6 +36,12 @@ class LayerChanges extends EventTarget {
   update(key, value) {
     this.#map.set(key, value);
   }
+  addRedrawLayer(layer, callback) {
+    this.addEventListener(
+      LayerChanges.redraw, callback 
+    );
+    callback();
+  }
 }
 
 export {

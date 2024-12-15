@@ -4,7 +4,7 @@ import StylePageRoot from "style-page-root" with { type: "css" };
 class PageRoot extends HTMLElement {
 
   static eventHandlerKeys = [
-    "stops/redraw"
+    "stops/redraw", "events/modal"
   ];
 
   constructor() {
@@ -26,6 +26,22 @@ class PageRoot extends HTMLElement {
   }
 
   toEventHandler(key) {
+    if (key === "events/modal") {
+      return async ({ detail }) => {
+        const layer_map_el = this.shadowRoot.querySelector(
+          "layer-map"
+        );
+        const event_modal_el = this.shadowRoot.querySelector(
+          "event-modal"
+        );
+        event_modal_el.setAttribute(
+          "stop_key", detail.stop_key
+        )
+        layer_map_el.panTo(detail.latitude, detail.longitude);
+        event_modal_el.className = "";
+        await event_modal_el.render();
+      }
+    }
     if (key === "stops/redraw") {
       return async ({ detail }) => {
         const stop_list_el = this.shadowRoot.querySelector(

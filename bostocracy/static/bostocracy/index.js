@@ -1,17 +1,21 @@
 import { LayerMap } from "layer-map";
 import { StopList } from "stop-list";
 import { PageRoot } from "page-root";
-import { toggle_tab } from "actions";
+import { EventModal } from "event-modal";
 import { 
-  events, tabs, default_tab
+  events
 } from "constants";
 
 const index = (user) => {
-  // Default Tab
+  // Page Root
   customElements.define(
-    default_tab, eventReceiver(
+    "page-root", eventReceiver(
       PageRoot, PageRoot.eventHandlerKeys
     )
+  );
+  // Event Modal
+  customElements.define(
+    "event-modal", EventModal
   );
   // Map Layer 
   customElements.define(
@@ -19,20 +23,8 @@ const index = (user) => {
   );
   // List of MBTA stops
   customElements.define(
-    "stop-list", StopList
+    "stop-list", eventSender(StopList)
   )
-  // Tab selection
-  tabs.forEach(tab => {
-    [
-      ...document.getElementsByClassName(`select-${tab}`)
-    ].forEach(
-      match => match.addEventListener(
-        "click", () => toggle_tab(tab, user)
-      )
-    );
-  });
-  // By default
-  toggle_tab(default_tab, user);
 };
 
 

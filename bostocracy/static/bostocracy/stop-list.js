@@ -1,5 +1,6 @@
 import StyleGlobal from "style-global" with { type: "css" };
 import StyleStopList from "style-stop-list" with { type: "css" };
+import { get_mbta_stops } from "api";
 
 class StopList extends HTMLElement {
 
@@ -20,11 +21,18 @@ class StopList extends HTMLElement {
   }
 
   async render() {
+    const stop_map = await get_mbta_stops();
     this.shadowRoot.innerHTML = "";
     const ids = this.getAttribute("ids").split(" ");
-    ids.forEach(id => {
-      const el = document.createElement("div"); 
-      el.innerText = id; // TODO
+    ids.filter(id => stop_map.has(id)).forEach(id => {
+      const el = document.createElement("button"); 
+      const stop = stop_map.get(id);
+      el.innerText = stop.name;
+      el.addEventListener("click", () => {
+        this.sendCustomEvent("events/modal", {
+          ...stop, stop_key: id
+        })
+      })
       this.shadowRoot.appendChild(el);
     })
   }

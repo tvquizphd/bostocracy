@@ -18,6 +18,12 @@ BOS
     <template id="page-root-view">
       <layer-map></layer-map>
       <stop-list ids="" ></stop-list>
+      <event-modal class="hide" stop_key="" ></event-modal>
+    </template>
+    <template id="event-modal-view">
+      <div></div>
+      <div></div>
+      <button>X</button>
     </template>
 
 {% endblock %}
@@ -30,13 +36,14 @@ BOS
           "color": "{% static 'bostocracy/color.js' %}",
           "index": "{% static 'bostocracy/index.js' %}",
           "angles": "{% static 'bostocracy/angles.js' %}",
-          "actions": "{% static 'bostocracy/actions.js' %}",
           "constants": "{% static 'bostocracy/constants.js' %}",
           "page-root": "{% static 'bostocracy/page-root.js' %}",
+          "event-modal": "{% static 'bostocracy/event-modal.js' %}",
           "stop-list": "{% static 'bostocracy/stop-list.js' %}",
           "layer-map": "{% static 'bostocracy/layer-map.js' %}",
           "style-global": "{% static 'bostocracy/global.css' %}",
           "style-page-root": "{% static 'bostocracy/page-root.css' %}",
+          "style-event-modal": "{% static 'bostocracy/event-modal.css' %}",
           "style-stop-list": "{% static 'bostocracy/stop-list.css' %}",
           "style-layer-map": "{% static 'bostocracy/layer-map.css' %}",
           "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",
