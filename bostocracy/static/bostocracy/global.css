@@ -9,7 +9,7 @@
   --dark-error: 20 0% 80%;
   --light-error: 350 53% 0%;
   --dark-focus: 290 0% 80%;
-  --light-focus: 36 70% 10%;
+  --light-focus: 30 75% 10%;
   --dark-action: 240 0% 70%;
   --light-action: 240 70% 3.9%;
   --button-border-radius: 8px;
@@ -19,6 +19,7 @@
   --focus-border: 1px solid hwb(var(--light-focus) / 0.7);
   --error-border: 1px solid hwb(var(--light-error) / 0.7);
   --button-padding: var(--gap-average);
+  --modal-corner: 3.5rem;
   --button-weight: 500;
   --gap-average: 0.9em;
   --gap-small: 0.6em;

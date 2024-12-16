@@ -130,6 +130,42 @@ const get_mbta_stops = async () => {
   )
 }
 
+const post_event = async (data, token) => {
+  return await (
+    fetch("/events", {
+      method: "POST", body: JSON.stringify(data),
+      headers: {
+        "X-CSRFToken": token,
+        "Content-Type": "application/json"
+      }
+    }).then(x => x.json()).catch(error => error)
+  );
+}
+
+const get_events = async () => {
+  const constant_events = [
+    {
+        "org": "Mass Struggle",
+        "title": "Counterprotest Start",
+        "datetime": "2030-11-17T07:00",
+        "stop_key": "place-kencl"
+    },{
+        "org": "Mass Struggle",
+        "title": "Counterprotest End",
+        "datetime": "2030-11-17T15:00",
+        "stop_key": "place-pktrm"
+    }
+  ]
+  const server_events = await (
+    fetch("/events").then(x => x.json()).catch(error => [])
+  ) || [];
+  console.log('a', server_events);
+  return [
+    ...constant_events, ...server_events
+  ]
+}
+
 export {
-  get_mbta_stops, get_map_fields, get_server
+  get_mbta_stops, get_map_fields, get_server,
+  post_event, get_events
 }

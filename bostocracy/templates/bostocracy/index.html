@@ -17,13 +17,19 @@ BOS
     </template>
     <template id="page-root-view">
       <layer-map></layer-map>
-      <stop-list ids="" ></stop-list>
+      <div class="toggle" show="events">
+        <button><span></span></button>
+        <stop-list ids="" ></stop-list>
+        <event-list events=""></event-list>
+      </div>
       <event-modal class="hide" stop_key="" ></event-modal>
     </template>
     <template id="event-modal-view">
       <div></div>
       <div></div>
-      <button>X</button>
+      <div>
+        <button>×</button>
+      </div>
       <event-form></event-form>
     </template>
     <template id="event-form-view">
@@ -90,12 +96,14 @@ BOS
           "event-modal": "{% static 'bostocracy/event-modal.js' %}",
           "event-form": "{% static 'bostocracy/event-form.js' %}",
           "stop-list": "{% static 'bostocracy/stop-list.js' %}",
+          "event-list": "{% static 'bostocracy/event-list.js' %}",
           "layer-map": "{% static 'bostocracy/layer-map.js' %}",
           "style-global": "{% static 'bostocracy/global.css' %}",
           "style-page-root": "{% static 'bostocracy/page-root.css' %}",
           "style-event-modal": "{% static 'bostocracy/event-modal.css' %}",
           "style-event-form": "{% static 'bostocracy/event-form.css' %}",
           "style-stop-list": "{% static 'bostocracy/stop-list.css' %}",
+          "style-event-list": "{% static 'bostocracy/event-list.css' %}",
           "style-layer-map": "{% static 'bostocracy/layer-map.css' %}",
           "layer-changes": "{% static 'bostocracy/layer-changes.js' %}",
           "config-layer-map": "{% static 'bostocracy/config-layer-map.js' %}",

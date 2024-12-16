@@ -1,11 +1,13 @@
 import { LayerMap } from "layer-map";
 import { StopList } from "stop-list";
+import { EventList } from "event-list";
 import { PageRoot } from "page-root";
 import { EventModal } from "event-modal";
 import { EventForm } from "event-form";
 import { 
   events
 } from "constants";
+
 
 const index = (user) => {
   // Page Root
@@ -16,7 +18,9 @@ const index = (user) => {
   );
   // Event Form
   customElements.define(
-    "event-form", eventSender(EventForm)
+    "event-form", eventSender(
+      inherit(EventForm, ["stop_key"])
+    )
   );
   // Event Modal
   customElements.define(
@@ -29,6 +33,10 @@ const index = (user) => {
   // List of MBTA stops
   customElements.define(
     "stop-list", eventSender(StopList)
+  )
+  // List of Events
+  customElements.define(
+    "event-list", eventSender(EventList)
   )
 };
 

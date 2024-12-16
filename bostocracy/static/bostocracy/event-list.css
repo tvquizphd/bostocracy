@@ -1,0 +1,28 @@
+:host {
+  --padding: calc(var(--gap-average)/2);
+  --wide: calc(var(--button-wide)*2);
+  --high: calc(
+    var(--panel-high)-2*var(--padding)
+  );
+  margin: calc(var(--gap-average)/2);
+  padding: var(--padding);
+  grid-template-columns: repeat(
+    auto-fill, minmax(var(--wide), 1fr)
+  );
+  gap: var(--gap-average);
+  display: grid;
+  > button {
+    color: inherit;
+    font-size: 1em;
+    cursor: pointer;
+    height: var(--high);
+    border: var(--main-border);
+    box-shadow: var(--box-shadow);
+    padding: var(--button-padding);
+    border-radius: var(--button-border-radius);
+    background-color: transparent;
+    grid-template-columns: auto auto;
+    text-align: left;
+    display: grid;
+  }
+}

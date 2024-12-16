@@ -5,6 +5,7 @@ import {
   to_map_config, layer_mapper, wherein,
   to_boston_bounds
 } from "config-layer-map";
+import { get_mbta_stops } from "api";
 import { LayerChanges } from "layer-changes";
 import StyleGlobal from "style-global" with { type: "css" };
 import StyleLeaflet from "style-leaflet" with { type: "css" };
@@ -26,33 +27,58 @@ class LayerMap extends HTMLElement {
     await this.render();
   }
 
-  async panTo(latitude, longitude) {
+  addCircle(latitude, longitude, kind, options={}) {
+    const fillColor = ({
+      "events/modal": "#2A0033",
+      "events/found": "#00004D"
+    })[kind] || "#000000";
+    const color = ({
+      "events/modal": "#FFBD59",
+      "events/found": "#B3EAF5"
+    })[kind] || "#FFFFFF";
+    const point = new L.LatLng(latitude, longitude);
+    const circle = L.circle(
+      point, {
+        weight: 5,
+        radius: 400,
+        color, fillColor,
+        pane: this.max_pane,
+        fillOpacity: 0.5,
+        ...options
+      }
+    )
+    circle.addTo(this.map);
+    this.circles.push({
+      circle, kind
+    });
+    return { point, circle }
+  }
+
+  async panToLocation(latitude, longitude) {
     if (!this.map) {
       return;
     }
     const point = new L.LatLng(latitude, longitude);
     this.map.panTo(point);
     this.map.once('moveend', () => {
-      const circle = L.circle(
-        point, {
-          weight: 5,
-          radius: 400,
-          color: "#FFBD59",
-          fillColor: "#2A0033",
-          pane: this.max_pane,
-          fillOpacity: 0.5
-        }
-      )
-      this.removeCircleType(
-        "events/modal"
-      )
-      circle.on("click", () => {
-        alert('ok');
-      });
-      circle.addTo(this.map);
-      this.circles.push({
-        circle, kind: 'events/modal'
-      });
+      this.map.setView(
+        point, Math.min(
+          this.map.getZoom()+2, 14
+        )
+      );
+    });
+  }
+
+  async panToNewEvent(latitude, longitude, options) {
+    if (!this.map) {
+      return;
+    }
+    const kind = 'events/modal'
+    const { point, circle } = this.addCircle(
+      latitude, longitude, kind, options 
+    );
+    this.map.panTo(point);
+    this.map.once('moveend', () => {
       this.map.setView(
         point, Math.min(
           this.map.getZoom()+2, 14
@@ -362,7 +388,39 @@ class LayerMap extends HTMLElement {
         );
       }
       layer.on('load', changes.loaded(key));
-  })
+    });
+    this.drawFoundEvents();
+  }
+  async drawFoundEvents() {
+    const events = JSON.parse(this.getAttribute("events"));
+    const stop_map = await get_mbta_stops();
+    this.removeCircleType("events/found");
+    events.forEach(({ stop_key }) => {
+      const stop = stop_map.get(stop_key);
+      if (stop) {
+        const { latitude, longitude } = stop
+        const { circle } = this.addCircle(
+          stop.latitude, stop.longitude, "events/found",
+          { stop_key }
+        );
+        circle.on("click", (e) => {
+          this.matchEventsAtStop(e);
+        });
+      }
+    });
+  }
+  matchEventsAtStop(e) {
+    const { target } = e;
+    const { options } = target;
+    const { stop_key } = options;
+    const events = JSON.parse(
+      this.getAttribute("events")
+    );
+    this.sendCustomEvent("events/found", { 
+      events: events.filter(
+        (ev) => ev.stop_key == stop_key 
+      )
+    });
   }
 }
 

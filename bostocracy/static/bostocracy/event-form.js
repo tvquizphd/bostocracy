@@ -1,5 +1,6 @@
 import StyleGlobal from "style-global" with { type: "css" };
 import StyleEventForm from "style-event-form" with { type: "css" };
+import { post_event } from "api";
 
 class EventForm extends HTMLElement {
 
@@ -45,20 +46,23 @@ class EventForm extends HTMLElement {
   }
 
   addEventListeners({ form, token }) {
-    console.log(form, token)
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const inputs = new Map(
         new FormData(e.target)
       );
       const data = {
-        body: inputs.get("body", "")
+        org: inputs.get("org", ""),
+        title: inputs.get("title", ""),
+        datetime: inputs.get("datetime", ""),
+        stop_key: this.getAttribute("stop_key") || ""
       }
-      const result = await post_post(data, token);
+      const result = await post_event(data, token);
       if (result.error) {
         console.log(result);
       }
-      this.getRootNode().host.render();
+      this.sendCustomEvent("events/reload", {});
+      this.sendCustomEvent("events/modal/close", {});
       return false;
     });
   }

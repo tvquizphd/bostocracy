@@ -30,7 +30,8 @@ class StopList extends HTMLElement {
       el.innerText = stop.name;
       el.addEventListener("click", () => {
         this.sendCustomEvent("events/modal", {
-          ...stop, stop_key: id
+          ...stop, stop_key: id,
+          edit: true
         })
       })
       this.shadowRoot.appendChild(el);

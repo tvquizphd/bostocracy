@@ -1,5 +1,6 @@
 :host {
   display: contents;
+  --close: var(--modal-corner);
   > form {
     grid-column: 1 / -1;
     grid-row: 1 / -1;
@@ -8,9 +9,10 @@
     padding: var(--gap-small);
     grid-template-columns: 1fr 3em;
     grid-template-rows: 1fr 2fr 1fr var(--panel-high);
-    > div:nth-child(1) {
+    > div.wrap-line:nth-child(1) {
       grid-row: 1;
       grid-column: 1;
+      grid-template-rows: var(--close) var(--close) 1fr;
     }
     > div:nth-child(2) {
       display: grid;
@@ -53,15 +55,17 @@
           font-size: 1.2em;
         }
         > input::-webkit-calendar-picker-indicator {
-          font-size: 3em;
+          font-size: 2em;
         } 
         > input[type=text] {
           line-height: 2em; 
           width: 300px;
         }
         > input[type=submit] {
+          color: white;
           cursor: pointer;
           font-size: 1.5em;
+          background-color: hwb(var(--dark-focus));
           padding: var(--button-padding);
         }
       }
