@@ -1,18 +1,19 @@
 import math
 
+
 def to_icon_line(
         color, degrees, thickness, length, opacity
-    ):
-    hex_color = f"#{color}";
+):
+    hex_color = f"#{color}"
     style = (
         f"fill:none;stroke-width:{thickness};"
         f"stroke:{hex_color};stroke-opacity:{opacity}"
     )
     radians = math.pi * (degrees / 180)
-    y0 = -1*math.sin(radians-math.pi)*length/2;
-    x0 = math.cos(radians-math.pi)*length/2;
-    y1 = -1*math.sin(radians)*length/2;
-    x1 = math.cos(radians)*length/2;
+    y0 = -1*math.sin(radians-math.pi)*length/2
+    x0 = math.cos(radians-math.pi)*length/2
+    y1 = -1*math.sin(radians)*length/2
+    x1 = math.cos(radians)*length/2
     return (
         f'<path d="M{x0} {y0}L{x1} {y1}" style="{style}"/>'
     )

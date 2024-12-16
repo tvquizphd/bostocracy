@@ -37,17 +37,19 @@ class PageRoot extends HTMLElement {
     const toggle_button = copy.querySelector(
       "button"
     );
-    toggle_button.addEventListener("click", async () => {
-      const show = toggle_el.getAttribute("show");
-      const show_stops = show == "events";
-      event_list_el.setAttribute(
-        "events", layer_map_el.getAttribute("events")
-      );
-      toggle_el.setAttribute(
-        "show", show_stops ? "stops" : "events"
-      )
-      await event_list_el.render();  
-    });
+    if (toggle_button) {
+      toggle_button.addEventListener("click", async () => {
+        const show = toggle_el.getAttribute("show");
+        const show_stops = show == "events";
+        event_list_el.setAttribute(
+          "events", layer_map_el.getAttribute("events")
+        );
+        toggle_el.setAttribute(
+          "show", show_stops ? "stops" : "events"
+        )
+        await event_list_el.render();  
+      });
+    }
     const events = await get_events();
     layer_map_el.setAttribute("events", JSON.stringify(events));
     event_list_el.setAttribute("events", JSON.stringify(events));

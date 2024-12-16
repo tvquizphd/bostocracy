@@ -1,12 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+import json
 
 from .icons import to_line, to_lines
-from .models import User 
+from .models import User, Post
 
 
 def to_line_svg(request, **kwargs):
@@ -15,6 +18,41 @@ def to_line_svg(request, **kwargs):
 
 def to_lines_svg(request, **kwargs):
     return n_lines(2)(request, **kwargs)
+
+
+@csrf_protect
+@login_required
+def event(request):
+
+    if request.method != "POST":
+        return JsonResponse({
+            "error": "Invalid HTTP request method."
+        }, status=400)
+
+    data = json.loads(request.body)
+    body = data.get("body", "")
+    post = Post(
+        org=data.get("org", ""),
+        title=data.get("title", ""),
+        stop_key=data.get("stop_key", ""),
+        datetime=data.get("datetime", "")
+    )
+    post.save()
+    return JsonResponse({"message": "Posted"}, status=201)
+
+
+def events(request):
+
+    if request.method != "GET":
+        return JsonResponse({
+            "error": "Invalid HTTP request method."
+        }, status=400)
+
+    posts = Post.objects.all()
+    posts = posts.order_by("-datetime").all()
+    return JsonResponse(
+        [post.serialize() for post in posts], safe=False
+    )
 
 
 def n_lines(n):
@@ -39,7 +77,7 @@ def n_lines(n):
             svg, content_type="image/svg+xml"
         )
 
-    return to_svg;
+    return to_svg
 
 
 def index(request):

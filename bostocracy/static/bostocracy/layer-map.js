@@ -36,6 +36,9 @@ class LayerMap extends HTMLElement {
       "events/modal": "#FFBD59",
       "events/found": "#B3EAF5"
     })[kind] || "#FFFFFF";
+    const opacity = ({
+      "events/found": 0.35
+    })[kind] || .55;
     const point = new L.LatLng(latitude, longitude);
     const circle = L.circle(
       point, {
@@ -43,7 +46,7 @@ class LayerMap extends HTMLElement {
         radius: 400,
         color, fillColor,
         pane: this.max_pane,
-        fillOpacity: 0.5,
+        fillOpacity: opacity,
         ...options
       }
     )

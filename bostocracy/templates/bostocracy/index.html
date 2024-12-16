@@ -18,7 +18,9 @@ BOS
     <template id="page-root-view">
       <layer-map></layer-map>
       <div class="toggle" show="events">
+{% if user.is_authenticated %}
         <button><span></span></button>
+{% endif %}
         <stop-list ids="" ></stop-list>
         <event-list events=""></event-list>
       </div>
@@ -42,7 +44,7 @@ BOS
           </div>
           <div class="wrap-input">
             <input
-              id="datetime" name="datetime" type="datetime-local"
+              id="datetime" name="datetime" type="datetime-local" required
             />
           </div>
         </div>
@@ -55,7 +57,7 @@ BOS
             </div>
             <div class="wrap-input">
               <input
-                id="title" name="title" type="text"
+                id="title" name="title" type="text" required
               />
             </div>
           </div>

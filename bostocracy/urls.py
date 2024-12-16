@@ -19,6 +19,9 @@ urlpatterns = [
     path(
         "line-<str:color>-<int:degrees>.svg", views.to_line_svg
     ),
+    # API Routes
+    path("events", views.events, name="events"),
+    path("event", views.event, name="event"),
     # Auth
     path("accounts/login/", views.login_view, name="login"),
     path("accounts/logout/", views.logout_view, name="logout"),

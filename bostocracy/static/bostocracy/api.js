@@ -132,7 +132,7 @@ const get_mbta_stops = async () => {
 
 const post_event = async (data, token) => {
   return await (
-    fetch("/events", {
+    fetch("/event", {
       method: "POST", body: JSON.stringify(data),
       headers: {
         "X-CSRFToken": token,
@@ -159,7 +159,9 @@ const get_events = async () => {
   const server_events = await (
     fetch("/events").then(x => x.json()).catch(error => [])
   ) || [];
-  console.log('a', server_events);
+  console.log([
+    ...constant_events, ...server_events
+  ]);
   return [
     ...constant_events, ...server_events
   ]
