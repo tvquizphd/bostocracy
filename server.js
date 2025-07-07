@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({
+  path: '.env.local' 
+});
 
 const { PrismaClient } = require('@prisma/client');
 const { verifyPassword, hashPassword } = require('./auth-utils');
@@ -253,7 +255,7 @@ app.use((req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Visit http://localhost:${PORT} to view the application`);
 });
