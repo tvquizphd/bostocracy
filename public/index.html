@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>BOS - bostocracy</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="/static/bostocracy/layout.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="body">
+            <page-root></page-root>
+        </div>
+        <nav class="navbar navbar-expand-lg">
+          <a class="select-events-map navbar-brand" href="#">Bostocracy</a>
+        
+          <div>
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="/accounts/logout/">Log Out</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/accounts/login/">Log In</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="/accounts/register/">Register</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <template id="layer-map-view">
+          <div id='map'></div>
+        </template>
+        <template id="page-root-view">
+          <layer-map></layer-map>
+          <div class="toggle" show="events">
+            <button><span></span></button>
+            <stop-list ids="" ></stop-list>
+            <event-list events=""></event-list>
+          </div>
+          <event-modal class="hide" stop_key="" ></event-modal>
+        </template>
+        <template id="event-modal-view">
+          <div></div>
+          <div></div>
+          <div>
+            <button>×</button>
+          </div>
+          <event-form></event-form>
+        </template>
+        <template id="event-form-view">
+          <form>
+            <div class="wrap-line">
+              <div class="wrap-label">
+                <label for="datetime">
+                  When? 
+                </label>
+              </div>
+              <div class="wrap-input">
+                <input
+                  id="datetime" name="datetime" type="datetime-local" required
+                />
+              </div>
+            </div>
+            <div>
+              <div class="wrap-line">
+                <div class="wrap-label">
+                  <label for="title">
+                    Event Name
+                  </label>
+                </div>
+                <div class="wrap-input">
+                  <input
+                    id="title" name="title" type="text" required
+                  />
+                </div>
+              </div>
+              <div class="wrap-line">
+                <div class="wrap-label">
+                  <label for="org">
+                    Organization
+                  </label>
+                </div>
+                <div class="wrap-input">
+                  <input
+                    id="org" name="org" type="text"
+                  />
+                </div>
+              </div>
+              <div class="wrap-line">
+                <div class="wrap-input wrap-submit">
+                  <input type="submit" value="Create">
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="csrfmiddlewaretoken" value="">
+          </form>
+        </template>
+
+        <script type="importmap">
+          {
+            "imports": {
+              "api": "/static/bostocracy/api.js",
+              "color": "/static/bostocracy/color.js",
+              "index": "/static/bostocracy/index.js",
+              "angles": "/static/bostocracy/angles.js",
+              "constants": "/static/bostocracy/constants.js",
+              "page-root": "/static/bostocracy/page-root.js",
+              "event-modal": "/static/bostocracy/event-modal.js",
+              "event-form": "/static/bostocracy/event-form.js",
+              "stop-list": "/static/bostocracy/stop-list.js",
+              "event-list": "/static/bostocracy/event-list.js",
+              "layer-map": "/static/bostocracy/layer-map.js",
+              "style-global": "/static/bostocracy/global.css",
+              "style-page-root": "/static/bostocracy/page-root.css",
+              "style-event-modal": "/static/bostocracy/event-modal.css",
+              "style-event-form": "/static/bostocracy/event-form.css",
+              "style-stop-list": "/static/bostocracy/stop-list.css",
+              "style-event-list": "/static/bostocracy/event-list.css",
+              "style-layer-map": "/static/bostocracy/layer-map.css",
+              "layer-changes": "/static/bostocracy/layer-changes.js",
+              "config-layer-map": "/static/bostocracy/config-layer-map.js",
+              "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+              "style-leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+              "esri-leaflet": "https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"
+            },
+            "integrity": {
+              "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js": "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=",
+              "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css": "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            }
+          }
+        </script>
+        <script type="module">
+          import { index } from '/static/bostocracy/index.js';
+          index({
+            username: "guest"
+          });
+        </script>
+    </body>
+</html> 

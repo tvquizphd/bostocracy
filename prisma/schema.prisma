@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  password          String
+  lastLogin         DateTime? @map("last_login")
+  isSuperuser       Boolean   @default(false) @map("is_superuser")
+  username          String    @unique
+  firstName         String    @default("") @map("first_name")
+  lastName          String    @default("") @map("last_name")
+  email             String
+  isStaff           Boolean   @default(false) @map("is_staff")
+  isActive          Boolean   @default(true) @map("is_active")
+  dateJoined        DateTime  @default(now()) @map("date_joined")
+  
+  // Relations
+  userGroups        UserGroup[]
+  userPermissions   UserPermission[]
+  adminLogs         AdminLog[]
+
+  @@map("bostocracy_user")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  datetime  DateTime @default(now())
+  stopKey   String   @map("stop_key")
+  title     String
+  org       String
+
+  @@map("bostocracy_post")
+}
+
+// Django auth tables (keeping for compatibility)
+model Group {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  
+  // Relations
+  userGroups  UserGroup[]
+  permissions GroupPermission[]
+
+  @@map("auth_group")
+}
+
+model Permission {
+  id            Int       @id @default(autoincrement())
+  contentTypeId Int       @map("content_type_id")
+  codename      String
+  name          String
+  
+  // Relations
+  userPermissions   UserPermission[]
+  groupPermissions  GroupPermission[]
+
+  @@map("auth_permission")
+}
+
+model ContentType {
+  id       Int    @id @default(autoincrement())
+  appLabel String @map("app_label")
+  model    String
+
+  @@unique([appLabel, model])
+  @@map("django_content_type")
+}
+
+model UserGroup {
+  id      Int @id @default(autoincrement())
+  userId  Int @map("user_id")
+  groupId Int @map("group_id")
+  
+  // Relations
+  user    User  @relation(fields: [userId], references: [id])
+  group   Group @relation(fields: [groupId], references: [id])
+
+  @@unique([userId, groupId])
+  @@map("bostocracy_user_groups")
+}
+
+model UserPermission {
+  id           Int @id @default(autoincrement())
+  userId       Int @map("user_id")
+  permissionId Int @map("permission_id")
+  
+  // Relations
+  user         User       @relation(fields: [userId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([userId, permissionId])
+  @@map("bostocracy_user_user_permissions")
+}
+
+model GroupPermission {
+  id           Int @id @default(autoincrement())
+  groupId      Int @map("group_id")
+  permissionId Int @map("permission_id")
+  
+  // Relations
+  group        Group      @relation(fields: [groupId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([groupId, permissionId])
+  @@map("auth_group_permissions")
+}
+
+model Session {
+  sessionKey  String   @id @map("session_key")
+  sessionData String   @map("session_data")
+  expireDate  DateTime @map("expire_date")
+  
+  @@index([expireDate])
+  @@map("django_session")
+}
+
+model AdminLog {
+  id            Int      @id @default(autoincrement())
+  objectId      String?  @map("object_id")
+  objectRepr    String   @map("object_repr")
+  actionFlag    Int      @map("action_flag")
+  changeMessage String   @map("change_message")
+  contentTypeId Int?     @map("content_type_id")
+  userId        Int      @map("user_id")
+  actionTime    DateTime @map("action_time")
+  
+  // Relations
+  user          User @relation(fields: [userId], references: [id])
+
+  @@map("django_admin_log")
+}
+
+model Migration {
+  id      Int      @id @default(autoincrement())
+  app     String
+  name    String
+  applied DateTime
+
+  @@map("django_migrations")
+} 
